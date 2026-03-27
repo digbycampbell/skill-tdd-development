@@ -133,7 +133,7 @@ anything that could go wrong if an attacker tried.
 ```
 
 ### `docs/specs/ui.md` — Created when the feature has user-facing interface
-What the user sees and interacts with.
+What the user sees and interacts with, including the styling approach and design system.
 
 ```
 # UI: [Feature/Project Name]
@@ -148,6 +148,12 @@ Note where the user makes decisions and what happens at each branch.
 ## States
 Loading, empty, error, success states for each view. These are easy to
 forget and painful to retrofit.
+
+## Styling & Design System
+CSS framework/approach, design tokens (colours, fonts, spacing), responsive
+breakpoints, component library choice, and styling conventions. This ensures
+consistent visual output across all phases and prevents ad-hoc styling decisions
+during implementation.
 
 ## Component Inventory
 Reusable UI components this feature needs. Note which already exist in the
@@ -171,6 +177,35 @@ What breaks when the external service is slow, down, or returns unexpected data.
 How the feature degrades gracefully.
 ```
 
+### `docs/specs/infrastructure.md` — Created when the project is deployed or hosted
+Where the application runs, how it's built and deployed, and what platform constraints
+affect implementation decisions.
+
+```
+# Infrastructure: [Feature/Project Name]
+
+## Hosting Platform
+Provider, tier, and platform-specific constraints (port binding, file system,
+cold starts, timeouts). This prevents implementers from building features the
+infrastructure can't support.
+
+## Environment Configuration
+Environment variables and platform-specific config files (.replit, replit.nix,
+vercel.json, etc.) needed for the application to run.
+
+## Build & Deploy Pipeline
+Local development commands, production build steps, and how deployment is triggered
+(auto-deploy on push, manual, platform "Run" button).
+
+## Database & Persistence
+Where data lives, how to connect, how migrations run, and backup strategy.
+
+## Known Limitations
+Honest constraints — ephemeral file systems, sleep behaviour, missing background
+job support, tier limits. This section directly informs what is and isn't feasible
+in Phase 3 implementation.
+```
+
 ## Templates
 
 This skill bundles template files in `assets/` for each spec document type.
@@ -187,8 +222,8 @@ cp assets/requirements.md docs/specs/requirements.md
 ```
 
 Available templates: `requirements.md`, `architecture.md`, `data-model.md`,
-`api.md`, `auth.md`, `ui.md`, `integration.md`, `docs-readme.md`, `specs-readme.md`,
-`roadmap.md`, `root-readme.md`.
+`api.md`, `auth.md`, `ui.md`, `integration.md`, `infrastructure.md`,
+`docs-readme.md`, `specs-readme.md`, `roadmap.md`, `root-readme.md`.
 
 Note: the roadmap template goes to `docs/ROADMAP.md` (alongside specs/, not inside it).
 
