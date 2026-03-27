@@ -16,9 +16,44 @@ Each phase produces artifacts that feed the next. Specs live in `docs/specs/` as
 
 ## Quick Start — Add to Your Project
 
-### Using git submodule (recommended)
+### Full setup (copy-paste checklist)
 
-This keeps the skills in sync across all your projects. When you improve a skill here, every project can pull the update.
+Run these steps from your project root to add the skills **and** ensure they survive Claude Code web sessions:
+
+```bash
+# 1. Add the submodule
+git submodule add https://github.com/digbycampbell/skill-tdd-development.git .claude/skills
+
+# 2. Create the SessionStart hook so submodules auto-init in web sessions
+mkdir -p .claude
+cat > .claude/settings.json << 'EOF'
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "git submodule update --init --recursive"
+          }
+        ]
+      }
+    ]
+  }
+}
+EOF
+
+# 3. Commit both
+git add .gitmodules .claude/skills .claude/settings.json
+git commit -m "Add TDD development pipeline skills with SessionStart hook"
+```
+
+> **Why the hook?** Claude Code on the web clones repos without `--recurse-submodules`, so the `.claude/skills` directory will be empty at the start of every session. The SessionStart hook runs `git submodule update --init --recursive` automatically before you start working.
+
+### Using git submodule only
+
+If you don't use Claude Code on the web, or you prefer to manage submodule init yourself:
 
 ```bash
 # From your project root
@@ -26,7 +61,7 @@ git submodule add https://github.com/digbycampbell/skill-tdd-development.git .cl
 git commit -m "Add TDD development pipeline skills"
 ```
 
-That's it. The 5 skills are now available in Claude Code via `/tdd-1-requirements`, `/tdd-2-test-design`, etc.
+The 5 skills are now available in Claude Code via `/tdd-1-requirements`, `/tdd-2-test-design`, etc.
 
 ### Cloning a project that already has the submodule
 
