@@ -43,7 +43,7 @@ Work through each dimension and produce a clear assessment.
 
 Go through each spec document and check every testable claim against the test suite.
 
-For `docs/docs/specs/requirements.md`:
+For `docs/specs/requirements.md`:
 - Each acceptance criterion → does a test exist that directly verifies it?
 - Each user story → is the user flow covered end-to-end?
 
@@ -125,6 +125,23 @@ Based on the above, recommend the next action. Be specific:
 - **If there's a natural next feature** that builds on this one → note it as a
   candidate for a new Phase 1 cycle
 
+After making recommendations, update the project documentation:
+
+**`docs/ROADMAP.md`** — if it exists:
+- Mark the current cycle's item as 🟢 Complete and move it to the Completed table
+- Link the evaluation report in the Completed table
+- Update "Current Cycle" to reflect the recommended next step
+- Add any newly discovered work items to Future / Backlog
+- Update sequencing notes if priorities have changed based on findings
+
+**`docs/specs/README.md`** — update the status column for each spec document:
+- Specs that are fully covered by passing tests → ✅ Current
+- Specs with drift or incomplete coverage → 🚧 Needs update
+- Add a row for the new evaluation report
+
+**`docs/README.md`** and **root `README.md`** — generally don't need updating
+per cycle, but flag if anything in them has become inaccurate.
+
 ## Output Format
 
 Produce a structured evaluation report:
@@ -152,7 +169,7 @@ Date: [today]
 [specific recommendation with reasoning]
 ```
 
-Save this report to `docs/docs/specs/evaluation-[date or iteration number].md` so there's a
+Save this report to `docs/specs/evaluation-[date or iteration number].md` so there's a
 history of evaluations over time.
 
 ## Templates

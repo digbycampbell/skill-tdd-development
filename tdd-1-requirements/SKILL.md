@@ -187,7 +187,10 @@ cp assets/requirements.md docs/specs/requirements.md
 ```
 
 Available templates: `requirements.md`, `architecture.md`, `data-model.md`,
-`api.md`, `auth.md`, `ui.md`, `integration.md`, `docs-readme.md`, `specs-readme.md`.
+`api.md`, `auth.md`, `ui.md`, `integration.md`, `docs-readme.md`, `specs-readme.md`,
+`roadmap.md`, `root-readme.md`.
+
+Note: the roadmap template goes to `docs/ROADMAP.md` (alongside specs/, not inside it).
 
 ## Your Process
 
@@ -206,8 +209,8 @@ Available templates: `requirements.md`, `architecture.md`, `data-model.md`,
 4. **Iterate.** The user will push back, clarify, or add things you missed. Update the
    documents until the user confirms they accurately describe what they want.
 
-5. **Generate the README files.** After the spec documents are finalised, create or update
-   two index files that make the documentation discoverable in the GitHub repo:
+5. **Generate the README files and roadmap.** After the spec documents are finalised,
+   create or update the index and planning files:
 
    **`docs/specs/README.md`** — a table of contents for the specs directory. Use the
    template at `assets/specs-readme.md`. This file is rendered automatically by GitHub
@@ -215,13 +218,21 @@ Available templates: `requirements.md`, `architecture.md`, `data-model.md`,
    created, with a one-line description and a status indicator (✅ Current, 🚧 Draft, or
    📋 Planned).
 
+   **`docs/ROADMAP.md`** — a prioritised plan for what to work on and in what order. Use
+   the template at `assets/roadmap.md`. Populate it with the restructuring targets or
+   features identified during the requirements interview, ordered by priority with
+   sequencing rationale. This is where the user tracks which TDD cycle they're in and
+   what comes next.
+
    **`docs/README.md`** — a top-level docs landing page. Use the template at
    `assets/docs-readme.md`. This provides context about the documentation structure and
-   links into `specs/` as well as any other docs directories that may exist.
+   links into `specs/` and the roadmap.
 
-   Also check whether the project's **root `README.md`** has a Documentation section
-   linking to `docs/`. If not, suggest adding one. Don't modify the root README without
-   asking — just propose the addition.
+   Also check whether the project's **root `README.md`** exists and links to `docs/`.
+   If no root README exists, create one using the template at `assets/root-readme.md`.
+   Fill in the project name, description, and getting-started instructions.
+   If a root README already exists but doesn't link to docs, propose adding a
+   Documentation section — show the user what to add but don't modify without asking.
 
 6. **Summarise the handoff.** At the end, briefly list which spec documents were created
    and note that the next phase is Phase 2 (Test Design) where these specs get turned into

@@ -8,6 +8,10 @@ and is maintained through a TDD development pipeline.
 
 See [specs/README.md](specs/README.md) for the full index.
 
+## [Roadmap](ROADMAP.md)
+
+Planned work, priorities, and sequencing across TDD cycles.
+
 <!-- Add additional documentation sections below as the project grows. -->
 <!-- Examples: -->
 <!-- ## [Deployment](deployment/) -->

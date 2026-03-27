@@ -22,7 +22,7 @@ fail or error when run — that's the correct state at the end of this phase.
 
 1. **Read all documents in `docs/specs/`.** Every spec document is relevant context.
    Pay particular attention to:
-   - `docs/docs/specs/requirements.md` — the acceptance criteria are your primary input
+   - `docs/specs/requirements.md` — the acceptance criteria are your primary input
    - `docs/specs/data-model.md` — tells you what shapes to assert against
    - `docs/specs/api.md` — tells you request/response contracts to verify
    - `docs/specs/ui.md` — tells you user flows to cover
