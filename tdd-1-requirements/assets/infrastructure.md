@@ -3,6 +3,21 @@
 > Spec created by TDD Phase 1 — Requirements Capture
 > Last updated: [date]
 
+## Discovery Checklist
+
+<!-- Verify each item before finalising this document. Check the box when confirmed
+     with the user or verified by inspecting the running platform. Don't assume —
+     config files show intent, not necessarily reality. -->
+
+- [ ] Hosting tier/plan and its resource limits confirmed
+- [ ] Filesystem persistence model verified (ephemeral vs persistent)
+- [ ] Database is actually provisioned and connection tested (not just in .env.example)
+- [ ] All required secrets/env vars are configured in the platform (not just templated)
+- [ ] Cold start / sleep behaviour documented with impact on features
+- [ ] Deployment trigger and branch identified
+- [ ] Domain, SSL, and port binding constraints captured
+- [ ] Background job / cron support assessed (or lack thereof noted)
+
 ## Hosting Platform
 
 - **Provider:** [Replit / Vercel / Netlify / AWS / Railway / etc.]

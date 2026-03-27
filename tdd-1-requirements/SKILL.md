@@ -181,6 +181,33 @@ How the feature degrades gracefully.
 Where the application runs, how it's built and deployed, and what platform constraints
 affect implementation decisions.
 
+**Infrastructure requires active discovery, not just template-filling.** The template
+has the right sections, but the agent must verify actual state — don't assume a
+`DATABASE_URL` in `.env.example` means a database is connected, or that a free tier
+has the same capabilities as a paid one.
+
+#### Infrastructure Interview Checklist
+
+When creating or updating `infrastructure.md`, work through these questions with the
+user. Many of these can be partially answered by reading config files (`.replit`,
+`replit.nix`, `package.json`, `vercel.json`, etc.), but always confirm assumptions
+with the user — config files show intent, not necessarily reality.
+
+| Area | Questions to Verify |
+|------|-------------------|
+| **Hosting tier & limits** | What plan/tier are you on? What are the resource limits (RAM, CPU, bandwidth, request timeouts)? Are there any costs or usage caps? |
+| **Filesystem persistence** | Is the filesystem ephemeral (wiped on redeploy/restart) or persistent? If ephemeral, does any feature depend on writing to disk (uploads, logs, SQLite)? |
+| **Database connectivity** | Is a database actually provisioned and connected, or is it just referenced in config/env templates? Can you confirm the connection works right now? Is it a platform add-on or an external service? |
+| **Secrets & env vars** | Which secrets/env vars are actually configured in the platform vs only listed in `.env.example`? Are any missing that the app needs to function? |
+| **Cold start / sleep behaviour** | Does the app sleep after inactivity? How long before it sleeps? How long to wake? Does this break any features (webhooks, scheduled tasks, WebSocket connections)? |
+| **Deployment trigger** | How is the app deployed — auto-deploy on push, manual trigger, platform "Run" button, CI pipeline? Which branch triggers deployment? |
+| **Domain & networking** | What's the production URL? Any custom domain? Is HTTPS automatic? Are there CORS restrictions? Does the platform require binding to a specific port or `0.0.0.0`? |
+| **Background work** | Does any feature need background jobs, cron, or long-running processes? Does the platform support these, or do you need an external service? |
+
+Group these naturally with the rest of the interview — infrastructure questions often
+arise during architecture (where does it run?), data-model (where is the database?),
+and integration (what env vars does the external service need?) discussions.
+
 ```
 # Infrastructure: [Feature/Project Name]
 
@@ -236,7 +263,10 @@ Note: the roadmap template goes to `docs/ROADMAP.md` (alongside specs/, not insi
 2. **Interview the user.** Ask focused questions to fill in the spec documents. Don't ask
    everything at once — group questions by concern. Start with requirements.md (what does
    it do?), then ask about architecture if the feature is multi-component, then data if
-   it persists anything, and so on.
+   it persists anything, and so on. For infrastructure, don't just fill in the template —
+   use the infrastructure interview checklist to actively verify hosting constraints,
+   database connectivity, secrets configuration, and deployment setup. Read platform config
+   files (`.replit`, `package.json`, env files) to form hypotheses, then confirm with the user.
 
 3. **Draft the spec documents.** Write them and present them to the user for review.
    Be concrete and specific — vague specs produce vague implementations.
