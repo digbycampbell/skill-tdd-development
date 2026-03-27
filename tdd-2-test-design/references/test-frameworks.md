@@ -1,7 +1,9 @@
 # Test Framework Reference
 
-Quick reference for setting up and configuring test frameworks in JS/React projects.
-Read the section relevant to the project's chosen framework.
+Quick reference for setting up and configuring test frameworks in JavaScript/TypeScript
+web applications. This pipeline currently targets the JS/TS ecosystem — the frameworks
+below cover unit, component, and end-to-end testing for web apps built with React, Vue,
+Next.js, or similar. Read the section relevant to the project's chosen framework.
 
 ## Table of Contents
 

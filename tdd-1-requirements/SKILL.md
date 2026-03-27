@@ -4,7 +4,7 @@ description: "Phase 1 of a TDD development pipeline. Use this skill when startin
 license: MIT
 metadata:
   author: user
-  version: "1.0"
+  pipeline-version: "1.1.0"
   pipeline-phase: "1"
 ---
 
@@ -251,3 +251,50 @@ Note: the roadmap template goes to `docs/ROADMAP.md` (alongside specs/, not insi
 - It's fine to create a spec document with some sections marked as "TBD — to be determined
   during implementation." Not everything can be known upfront, and acknowledging that is
   better than guessing.
+
+## Scope Check
+
+Before finalising the spec documents, count your acceptance criteria. Use this as a rough
+guide:
+
+| AC Count | Guidance |
+|----------|----------|
+| 1–8 | Good size for a single TDD cycle |
+| 9–15 | Consider splitting into 2 cycles by natural boundaries (e.g., read vs write operations, public vs admin features) |
+| 16+ | Too large — split into smaller features. Each cycle should be completable in a focused session. |
+
+If you're speccing an entire application, start with the roadmap (`docs/ROADMAP.md`) to
+break it into prioritised features, then run one TDD cycle per feature.
+
+Also consider the **vertical slice** rule: each cycle should deliver a testable slice of
+functionality end-to-end, not a horizontal layer. "All database models" is a bad cycle;
+"user can register and log in" is a good one.
+
+## Branch and Commit Strategy
+
+Each TDD cycle (Phases 1–5) should happen on a single feature branch. Create the branch
+when starting Phase 1 (e.g., `feature/user-auth`) and merge to main when Phase 5 confirms
+the feature is complete.
+
+Commit at natural phase boundaries:
+- After Phase 1: spec documents finalised
+- After Phase 2: failing test suite written
+- After Phase 3: all tests passing
+- After Phase 4: code refactored, tests still green
+- After Phase 5: evaluation report added
+
+Mention commit points to the user at the end of each phase. Don't commit without asking.
+
+## Phase Interrupts
+
+If you discover during this phase that an upstream artifact is wrong (e.g., contradictory
+requirements, a spec that conflicts with what the user is now describing), follow this
+protocol:
+
+1. **Stop and flag it.** Tell the user exactly what the conflict is.
+2. **Get user confirmation** before modifying any existing spec document. Never silently
+   rewrite a spec — the user must approve changes to upstream artifacts.
+3. **Document the change.** When updating a spec, note what changed and why at the bottom
+   of the document in a `## Change Log` section.
+4. **Re-validate downstream.** If spec changes affect existing tests or implementation
+   from a previous cycle, note which downstream artifacts need updating.

@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires Node.js for traceability script. Project should use Vitest, Jest, or Playwright.
 metadata:
   author: user
-  version: "1.0"
+  pipeline-version: "1.1.0"
   pipeline-phase: "2"
 ---
 
@@ -137,14 +137,20 @@ These are commonly missed and frequently cause bugs:
 3. **Get user approval on the plan** before writing code. They may know about edge cases
    you've missed, or may want to deprioritise certain test categories.
 
-4. **Write the tests.** Follow the existing project conventions for file location, import
+4. **Save the test plan.** Once approved, write the test plan to `docs/specs/test-plan.md`.
+   This persists the plan as a handoff artifact so that Phase 3 (and anyone picking up
+   the work in a different session) has full context on what was planned, what was
+   prioritised, and what was deliberately deferred. Update this file as tests are written —
+   check off items as their test files are created.
+
+5. **Write the tests.** Follow the existing project conventions for file location, import
    style, and test utilities. If the project has test helpers or factories, use them.
 
-5. **Run the tests.** They should all fail or error (since there's no implementation yet).
+6. **Run the tests.** They should all fail or error (since there's no implementation yet).
    If any test passes, it's either testing something that already exists (fine) or it's
    not actually testing anything (fix it).
 
-6. **Report the result.** List the tests by category, confirm they all fail, and note that
+7. **Report the result.** List the tests by category, confirm they all fail, and note that
    the project is ready for Phase 3 (Implementation).
 
 ## Important Behaviours
@@ -198,3 +204,26 @@ The script scans `docs/specs/` for `AC-N` patterns and test files for spec refer
 then reports which criteria are covered and which are missing tests. It also catches
 "orphan" references — tests that reference AC numbers that don't exist in the specs,
 which usually means a spec was updated without updating the tests.
+
+## Branch and Commit Strategy
+
+Each TDD cycle (Phases 1–5) should happen on a single feature branch. You should be on
+the same branch that was created during Phase 1 (e.g., `feature/user-auth`).
+
+Commit at the end of this phase once the failing test suite is complete and the test plan
+has been saved to `docs/specs/test-plan.md`. This is a natural commit point — mention it
+to the user. Don't commit without asking.
+
+## Phase Interrupts
+
+If you discover during test design that an upstream spec is incomplete, ambiguous, or
+contradictory, follow this protocol:
+
+1. **Stop and flag it.** Tell the user exactly what's missing or conflicting in the spec.
+2. **Do not update spec documents yourself** — that's Phase 1's job. Ask the user whether
+   they want to pause test design and return to Phase 1 to fix the spec, or whether they
+   want to proceed with an assumption (which you should document in the test plan).
+3. **Get user confirmation** before proceeding with any assumption about intended behaviour.
+   Never guess at what a spec should say — the user must decide.
+4. **Document any assumptions** in the test plan (`docs/specs/test-plan.md`) so they're
+   visible when the spec is eventually updated.

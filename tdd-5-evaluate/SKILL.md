@@ -4,7 +4,7 @@ description: "Phase 5 of a TDD development pipeline. Use this skill to evaluate 
 license: MIT
 metadata:
   author: user
-  version: "1.0"
+  pipeline-version: "1.1.0"
   pipeline-phase: "5"
 ---
 
@@ -22,11 +22,13 @@ This is the decision point in the TDD cycle. After evaluation, the user either s
 1. **Run the traceability checker.** The Phase 2 skill bundles a script that automates
    the spec-to-test coverage check. Run it first to get a baseline:
    ```bash
-   node ../tdd-2-test-design/scripts/traceability.mjs [project-root]
+   node .claude/skills/tdd-2-test-design/scripts/traceability.mjs .
    ```
+   (Adjust the path if the skills submodule is installed elsewhere.)
    This produces a coverage report at `docs/specs/traceability-report.json` and prints a
-   summary to stdout. Use this as the starting point for your evaluation — it catches
-   the mechanical gaps so you can focus on the qualitative ones.
+   summary to stdout. It tracks acceptance criteria, API endpoints, data model entities,
+   state transitions, and UI flows. Use this as the starting point for your evaluation —
+   it catches the mechanical gaps so you can focus on the qualitative ones.
 
 2. Read everything:
 
@@ -207,3 +209,28 @@ and prioritised next steps — producing a consistent format across evaluation c
 - Keep the evaluation actionable. "Test coverage could be improved" is useless. "AC-3
   (password reset) has no tests — recommend returning to Phase 2 to add unit tests for
   the reset token generation and an integration test for the full reset flow" is useful.
+
+## Branch and Commit Strategy
+
+Each TDD cycle (Phases 1–5) should happen on a single feature branch. You should be on
+the same branch that was created during Phase 1 (e.g., `feature/user-auth`).
+
+Commit the evaluation report and any documentation updates at the end of this phase.
+If the evaluation confirms the feature is complete, this is the final commit before
+merging to main. Mention the merge to the user — don't merge without asking.
+
+If the evaluation recommends returning to an earlier phase, stay on the same branch
+and continue the cycle.
+
+## Phase Interrupts
+
+If the evaluation reveals that specs are fundamentally wrong or incomplete:
+
+1. **Lead with it.** Don't bury spec problems in the details — a wrong spec means
+   everything downstream may be built on a wrong assumption.
+2. **Get user confirmation** before recommending a course of action. Present the options:
+   - Return to Phase 1 to revise specs, then cascade through Phases 2–4 as needed
+   - Accept the drift and update specs to match what was actually built (user must approve)
+   - Defer the fix to a future cycle and document it in the roadmap
+3. **Never update specs yourself during evaluation.** Your job is to assess and recommend.
+   Spec changes belong in Phase 1, with user approval.

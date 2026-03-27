@@ -24,6 +24,11 @@
 <!-- Example: -->
 <!-- - [evaluation-001.md](evaluation-001.md) — 2026-03-27, initial assessment -->
 
+## Related
+
+- [Roadmap](../ROADMAP.md) — priorities, current cycle, and sequencing across TDD cycles
+- [Documentation index](../README.md) — top-level docs landing page
+
 ## Process
 
 Each spec document is created during **Phase 1 (Requirements)** and referenced by
