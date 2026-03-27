@@ -4,7 +4,7 @@ description: "Phase 3 of a TDD development pipeline. Use this skill to write imp
 license: MIT
 metadata:
   author: user
-  version: "1.0"
+  pipeline-version: "1.1.0"
   pipeline-phase: "3"
 ---
 
@@ -146,3 +146,27 @@ All tests pass. At this point:
 Follow the project's existing directory structure. If this is a new project, follow
 the structure implied by the test file locations (since tests were written first in
 Phase 2, they establish the expected source file paths via their imports).
+
+## Branch and Commit Strategy
+
+Each TDD cycle (Phases 1–5) should happen on a single feature branch. You should be on
+the same branch that was created during Phase 1 (e.g., `feature/user-auth`).
+
+Commit after each meaningful group of related tests goes green — these are natural
+commit points. Mention them to the user. Don't commit without asking.
+
+## Phase Interrupts
+
+If you discover during implementation that a spec or test is wrong, follow this protocol:
+
+1. **Stop and flag it.** Quote the specific spec line and/or test assertion that's
+   problematic. Describe what you expected vs what you found.
+2. **Do not silently fix upstream artifacts.** A spec fix belongs in Phase 1. A test fix
+   belongs in Phase 2. Never rewrite a spec or test to match your implementation.
+3. **Get user confirmation** on how to proceed. Options:
+   - Return to Phase 1 to fix the spec (then re-validate tests in Phase 2)
+   - Return to Phase 2 to fix the test (if the spec is correct but the test misinterprets it)
+   - Proceed with a documented assumption (if the user wants to defer the fix)
+4. **Commit your WIP** before switching phases, with a message like
+   `WIP: pausing Phase 3 — spec conflict in [document]`
+5. **Resume where you left off** after the upstream fix is resolved.

@@ -112,6 +112,13 @@ These skills follow the [agentskills.io](https://agentskills.io) open standard a
 
 **This pipeline is designed for JavaScript/TypeScript web applications.** The test framework references, tooling (Vitest, Jest, Playwright, React Testing Library), and traceability script all assume a JS/TS project with Node.js available. The TDD process and spec document structures are language-agnostic in principle, but the bundled tooling and guidance are JS/TS-specific. Support for other ecosystems (Python, Go, Rust, etc.) may be added in future versions.
 
+## Roadmap
+
+Planned improvements to the skills pipeline:
+
+- [ ] **CI/CD integration guide** — GitHub Actions workflow template for running the traceability checker on PRs, PR template referencing TDD phases, and evaluation report as a merge gate
+- [ ] **Multi-language support** — Test framework references and traceability tooling for Python (pytest), Go (testing), Rust (cargo test), and other ecosystems
+
 ## License
 
 MIT

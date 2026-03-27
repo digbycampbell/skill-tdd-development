@@ -4,7 +4,7 @@ description: "Phase 4 of a TDD development pipeline. Use this skill to refactor 
 license: MIT
 metadata:
   author: user
-  version: "1.0"
+  pipeline-version: "1.1.0"
   pipeline-phase: "4"
 ---
 
@@ -156,3 +156,27 @@ Never skip step 3. "Obviously this won't break anything" is the prelude to broke
 - If you find something that's technically not broken but feels wrong, and you can't
   articulate why, note it as a "smell" rather than trying to fix it. Trust the instinct
   but explain it so the user can decide.
+
+## Branch and Commit Strategy
+
+Each TDD cycle (Phases 1–5) should happen on a single feature branch. You should be on
+the same branch that was created during Phase 1 (e.g., `feature/user-auth`).
+
+Small, focused commits are ideal during refactoring. Each refactoring category (or even
+each individual refactoring) is a natural commit point. Mention them to the user.
+Don't commit without asking.
+
+## Phase Interrupts
+
+If you discover during refactoring that a spec, test, or implementation issue exists
+that can't be addressed by refactoring alone, follow this protocol:
+
+1. **Stop and flag it.** Describe what you found and why refactoring can't fix it.
+2. **Do not add new functionality or change behaviour.** If a feature is missing, that
+   needs new tests first (Phase 2). If a spec is wrong, that's Phase 1.
+3. **Get user confirmation** on how to proceed. Common scenarios:
+   - Missing test coverage for code you want to refactor → note it, suggest a Phase 2
+     pass before refactoring that area
+   - Untested code that needs cleanup → flag it but don't touch it. Refactoring untested
+     code is gambling, not engineering.
+4. **Document findings** in your end-of-phase summary so they feed into Phase 5.

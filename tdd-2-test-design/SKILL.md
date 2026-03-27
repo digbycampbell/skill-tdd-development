@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires Node.js for traceability script. Project should use Vitest, Jest, or Playwright.
 metadata:
   author: user
-  version: "1.0"
+  pipeline-version: "1.1.0"
   pipeline-phase: "2"
 ---
 
@@ -204,3 +204,26 @@ The script scans `docs/specs/` for `AC-N` patterns and test files for spec refer
 then reports which criteria are covered and which are missing tests. It also catches
 "orphan" references — tests that reference AC numbers that don't exist in the specs,
 which usually means a spec was updated without updating the tests.
+
+## Branch and Commit Strategy
+
+Each TDD cycle (Phases 1–5) should happen on a single feature branch. You should be on
+the same branch that was created during Phase 1 (e.g., `feature/user-auth`).
+
+Commit at the end of this phase once the failing test suite is complete and the test plan
+has been saved to `docs/specs/test-plan.md`. This is a natural commit point — mention it
+to the user. Don't commit without asking.
+
+## Phase Interrupts
+
+If you discover during test design that an upstream spec is incomplete, ambiguous, or
+contradictory, follow this protocol:
+
+1. **Stop and flag it.** Tell the user exactly what's missing or conflicting in the spec.
+2. **Do not update spec documents yourself** — that's Phase 1's job. Ask the user whether
+   they want to pause test design and return to Phase 1 to fix the spec, or whether they
+   want to proceed with an assumption (which you should document in the test plan).
+3. **Get user confirmation** before proceeding with any assumption about intended behaviour.
+   Never guess at what a spec should say — the user must decide.
+4. **Document any assumptions** in the test plan (`docs/specs/test-plan.md`) so they're
+   visible when the spec is eventually updated.
