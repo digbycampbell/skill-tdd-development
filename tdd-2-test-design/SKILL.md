@@ -137,14 +137,20 @@ These are commonly missed and frequently cause bugs:
 3. **Get user approval on the plan** before writing code. They may know about edge cases
    you've missed, or may want to deprioritise certain test categories.
 
-4. **Write the tests.** Follow the existing project conventions for file location, import
+4. **Save the test plan.** Once approved, write the test plan to `docs/specs/test-plan.md`.
+   This persists the plan as a handoff artifact so that Phase 3 (and anyone picking up
+   the work in a different session) has full context on what was planned, what was
+   prioritised, and what was deliberately deferred. Update this file as tests are written —
+   check off items as their test files are created.
+
+5. **Write the tests.** Follow the existing project conventions for file location, import
    style, and test utilities. If the project has test helpers or factories, use them.
 
-5. **Run the tests.** They should all fail or error (since there's no implementation yet).
+6. **Run the tests.** They should all fail or error (since there's no implementation yet).
    If any test passes, it's either testing something that already exists (fine) or it's
    not actually testing anything (fix it).
 
-6. **Report the result.** List the tests by category, confirm they all fail, and note that
+7. **Report the result.** List the tests by category, confirm they all fail, and note that
    the project is ready for Phase 3 (Implementation).
 
 ## Important Behaviours

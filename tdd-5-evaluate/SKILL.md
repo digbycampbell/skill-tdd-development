@@ -22,11 +22,13 @@ This is the decision point in the TDD cycle. After evaluation, the user either s
 1. **Run the traceability checker.** The Phase 2 skill bundles a script that automates
    the spec-to-test coverage check. Run it first to get a baseline:
    ```bash
-   node ../tdd-2-test-design/scripts/traceability.mjs [project-root]
+   node .claude/skills/tdd-2-test-design/scripts/traceability.mjs .
    ```
+   (Adjust the path if the skills submodule is installed elsewhere.)
    This produces a coverage report at `docs/specs/traceability-report.json` and prints a
-   summary to stdout. Use this as the starting point for your evaluation — it catches
-   the mechanical gaps so you can focus on the qualitative ones.
+   summary to stdout. It tracks acceptance criteria, API endpoints, data model entities,
+   state transitions, and UI flows. Use this as the starting point for your evaluation —
+   it catches the mechanical gaps so you can focus on the qualitative ones.
 
 2. Read everything:
 

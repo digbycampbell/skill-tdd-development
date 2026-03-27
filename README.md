@@ -110,7 +110,7 @@ tdd-5-evaluate/
 
 These skills follow the [agentskills.io](https://agentskills.io) open standard and work with any compatible agent, including Claude Code, OpenAI Codex, GitHub Copilot, and others.
 
-The test framework reference is oriented toward JavaScript/TypeScript web apps (Vitest, Jest, Playwright, React Testing Library), but the TDD process itself is language-agnostic.
+**This pipeline is designed for JavaScript/TypeScript web applications.** The test framework references, tooling (Vitest, Jest, Playwright, React Testing Library), and traceability script all assume a JS/TS project with Node.js available. The TDD process and spec document structures are language-agnostic in principle, but the bundled tooling and guidance are JS/TS-specific. Support for other ecosystems (Python, Go, Rust, etc.) may be added in future versions.
 
 ## License
 

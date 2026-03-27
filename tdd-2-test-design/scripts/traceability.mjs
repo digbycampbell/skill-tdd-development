@@ -3,8 +3,14 @@
 /**
  * Spec-to-Test Traceability Checker
  *
- * * Scans docs/specs/ for acceptance criteria and test files for spec references,
- * then reports which criteria have test coverage and which don't.
+ * Scans docs/specs/ for testable items and test files for spec references,
+ * then reports which items have test coverage and which don't.
+ *
+ * Tracks:
+ *   - Acceptance criteria (AC-N) from requirements.md
+ *   - API endpoints (METHOD /path) from api.md
+ *   - Data model entities from data-model.md
+ *   - UI user flows from ui.md
  *
  * Usage:
  *   node traceability.mjs [project-root]
@@ -99,6 +105,120 @@ async function extractAcceptanceCriteria() {
   return criteria;
 }
 
+// --- Extract API endpoints from api.md ---
+
+async function extractApiEndpoints() {
+  const endpoints = [];
+  const apiFile = join(specsDir, 'api.md');
+
+  if (!(await fileExists(apiFile))) return endpoints;
+
+  const content = await readFile(apiFile, 'utf-8');
+  const relPath = relative(projectRoot, apiFile);
+
+  // Match "GET /api/foo", "POST /api/bar/:id", etc. in headings or table rows
+  const endpointPattern = /\b(GET|POST|PUT|PATCH|DELETE)\s+(\/\S+)/gi;
+  let match;
+  const seen = new Set();
+  while ((match = endpointPattern.exec(content)) !== null) {
+    const id = `${match[1].toUpperCase()} ${match[2]}`;
+    if (!seen.has(id)) {
+      seen.add(id);
+      endpoints.push({
+        id,
+        type: 'api-endpoint',
+        source: relPath,
+      });
+    }
+  }
+
+  return endpoints;
+}
+
+// --- Extract data model entities from data-model.md ---
+
+async function extractDataModelEntities() {
+  const entities = [];
+  const dmFile = join(specsDir, 'data-model.md');
+
+  if (!(await fileExists(dmFile))) return entities;
+
+  const content = await readFile(dmFile, 'utf-8');
+  const relPath = relative(projectRoot, dmFile);
+
+  // Match "### EntityName" or "## EntityName" under an Entities section
+  const entitySection = content.match(/## Entities\n([\s\S]*?)(?=\n## [^#]|$)/);
+  if (entitySection) {
+    const headingPattern = /^###\s+`?(\w+)`?/gm;
+    let match;
+    while ((match = headingPattern.exec(entitySection[1])) !== null) {
+      entities.push({
+        id: `Entity:${match[1]}`,
+        type: 'data-entity',
+        source: relPath,
+      });
+    }
+  }
+
+  // Match state transitions: "draft → published", "active → archived", etc.
+  const transitionPattern = /(\w+)\s*→\s*(\w+)/g;
+  let tmatch;
+  const transitions = new Set();
+  while ((tmatch = transitionPattern.exec(content)) !== null) {
+    const id = `Transition:${tmatch[1]}→${tmatch[2]}`;
+    if (!transitions.has(id)) {
+      transitions.add(id);
+      entities.push({
+        id,
+        type: 'state-transition',
+        source: relPath,
+      });
+    }
+  }
+
+  return entities;
+}
+
+// --- Extract UI user flows from ui.md ---
+
+async function extractUiFlows() {
+  const flows = [];
+  const uiFile = join(specsDir, 'ui.md');
+
+  if (!(await fileExists(uiFile))) return flows;
+
+  const content = await readFile(uiFile, 'utf-8');
+  const relPath = relative(projectRoot, uiFile);
+
+  // Match "### Flow Name" or numbered flows under "## User Flows"
+  const flowSection = content.match(/## User Flows\n([\s\S]*?)(?=\n## [^#]|$)/);
+  if (flowSection) {
+    const headingPattern = /^###\s+(.+)/gm;
+    let match;
+    while ((match = headingPattern.exec(flowSection[1])) !== null) {
+      flows.push({
+        id: `Flow:${match[1].trim()}`,
+        type: 'ui-flow',
+        source: relPath,
+      });
+    }
+
+    // Also match numbered list items as flows if no sub-headings found
+    if (flows.length === 0) {
+      const listPattern = /^\d+\.\s+(.+)/gm;
+      while ((match = listPattern.exec(flowSection[1])) !== null) {
+        flows.push({
+          id: `Flow:${match[1].trim()}`,
+          type: 'ui-flow',
+          source: relPath,
+        });
+      }
+    }
+  }
+
+  return flows;
+}
+
 // --- Extract spec references from test files ---
 
 async function extractTestReferences() {
@@ -164,6 +284,45 @@ async function extractTestReferences() {
         });
       }
     }
+
+    // Match API endpoint references: "GET /api/foo", "POST /path" in test files
+    const endpointRefPattern = /\b(GET|POST|PUT|PATCH|DELETE)\s+(\/\S+)/gi;
+    while ((match = endpointRefPattern.exec(content)) !== null) {
+      const id = `${match[1].toUpperCase()} ${match[2]}`;
+      if (!references.some(r => r.criterionId === id && r.testFile === relPath)) {
+        references.push({
+          criterionId: id,
+          testFile: relPath,
+          specFile: '(inline endpoint reference)',
+        });
+      }
+    }
+
+    // Match entity references: "Entity:Name" in test comments
+    const entityRefPattern = /Entity:(\w+)/g;
+    while ((match = entityRefPattern.exec(content)) !== null) {
+      const id = `Entity:${match[1]}`;
+      if (!references.some(r => r.criterionId === id && r.testFile === relPath)) {
+        references.push({
+          criterionId: id,
+          testFile: relPath,
+          specFile: '(inline entity reference)',
+        });
+      }
+    }
+
+    // Match flow references: "Flow:Name" in test comments
+    const flowRefPattern = /Flow:(.+?)(?:\s*\*\/|\s*$)/gm;
+    while ((match = flowRefPattern.exec(content)) !== null) {
+      const id = `Flow:${match[1].trim()}`;
+      if (!references.some(r => r.criterionId === id && r.testFile === relPath)) {
+        references.push({
+          criterionId: id,
+          testFile: relPath,
+          specFile: '(inline flow reference)',
+        });
+      }
+    }
   }
 
   return { references, testFileCount: new Set(testFiles.map(f => relative(projectRoot, f))).size };
@@ -198,15 +357,27 @@ async function countTestCases() {
 async function main() {
   console.log(`\nTraceability Report for: ${projectRoot}\n${'='.repeat(50)}\n`);
 
+  // Gather all trackable spec items
   const criteria = await extractAcceptanceCriteria();
+  const apiEndpoints = await extractApiEndpoints();
+  const dataEntities = await extractDataModelEntities();
+  const uiFlows = await extractUiFlows();
+
+  const allSpecItems = [
+    ...criteria,
+    ...apiEndpoints,
+    ...dataEntities,
+    ...uiFlows,
+  ];
+
   const { references, testFileCount } = await extractTestReferences();
   const testCount = await countTestCases();
 
   // Build coverage map
-  const coverage = criteria.map(criterion => {
-    const matchingRefs = references.filter(r => r.criterionId === criterion.id);
+  const coverage = allSpecItems.map(item => {
+    const matchingRefs = references.filter(r => r.criterionId === item.id);
     return {
-      ...criterion,
+      ...item,
       covered: matchingRefs.length > 0,
       testFiles: [...new Set(matchingRefs.map(r => r.testFile))],
     };
@@ -215,42 +386,63 @@ async function main() {
   const covered = coverage.filter(c => c.covered);
   const uncovered = coverage.filter(c => !c.covered);
 
-  // Orphan references — test files referencing ACs that don't exist in docs/specs
-  const specAcIds = new Set(criteria.map(c => c.id));
-  const orphanRefs = references.filter(r => r.criterionId && !specAcIds.has(r.criterionId));
+  // Orphan references — tests referencing items that don't exist in docs/specs
+  const specItemIds = new Set(allSpecItems.map(c => c.id));
+  const orphanRefs = references.filter(r => r.criterionId && !specItemIds.has(r.criterionId));
 
-  // Print report
+  // Group by type for display
+  const acItems = coverage.filter(c => c.id.startsWith('AC-'));
+  const endpointItems = coverage.filter(c => c.type === 'api-endpoint');
+  const entityItems = coverage.filter(c => c.type === 'data-entity');
+  const transitionItems = coverage.filter(c => c.type === 'state-transition');
+  const flowItems = coverage.filter(c => c.type === 'ui-flow');
+
+  // Print summary
   console.log(`Specs found:          ${(await findFiles(specsDir, /\.md$/)).length} files`);
   console.log(`Test files found:     ${testFileCount}`);
   console.log(`Test cases found:     ~${testCount}`);
-  console.log(`Acceptance criteria:  ${criteria.length}`);
-  console.log(`  Covered by tests:   ${covered.length}`);
-  console.log(`  NOT covered:        ${uncovered.length}`);
-  console.log(`  Coverage:           ${criteria.length > 0 ? Math.round(covered.length / criteria.length * 100) : 0}%`);
+  console.log();
+  console.log(`Trackable spec items: ${allSpecItems.length}`);
+  console.log(`  Acceptance criteria:  ${acItems.length} (${acItems.filter(c => c.covered).length} covered)`);
+  if (endpointItems.length > 0)
+    console.log(`  API endpoints:        ${endpointItems.length} (${endpointItems.filter(c => c.covered).length} covered)`);
+  if (entityItems.length > 0)
+    console.log(`  Data entities:        ${entityItems.length} (${entityItems.filter(c => c.covered).length} covered)`);
+  if (transitionItems.length > 0)
+    console.log(`  State transitions:    ${transitionItems.length} (${transitionItems.filter(c => c.covered).length} covered)`);
+  if (flowItems.length > 0)
+    console.log(`  UI flows:             ${flowItems.length} (${flowItems.filter(c => c.covered).length} covered)`);
+  console.log(`  Overall coverage:     ${allSpecItems.length > 0 ? Math.round(covered.length / allSpecItems.length * 100) : 0}%`);
   console.log();
 
-  if (covered.length > 0) {
-    console.log('COVERED:');
-    for (const c of covered) {
-      console.log(`  [x] ${c.id}: ${c.description}`);
+  // Print detailed results by type
+  function printSection(label, items) {
+    if (items.length === 0) return;
+    const coveredItems = items.filter(c => c.covered);
+    const uncoveredItems = items.filter(c => !c.covered);
+
+    console.log(`${label}:`);
+    for (const c of coveredItems) {
+      console.log(`  [x] ${c.id}${c.description ? ': ' + c.description : ''}`);
       for (const tf of c.testFiles) {
         console.log(`      └── ${tf}`);
       }
     }
-    console.log();
-  }
-
-  if (uncovered.length > 0) {
-    console.log('NOT COVERED (need tests):');
-    for (const c of uncovered) {
-      console.log(`  [ ] ${c.id}: ${c.description}`);
+    for (const c of uncoveredItems) {
+      console.log(`  [ ] ${c.id}${c.description ? ': ' + c.description : ''}`);
       console.log(`      └── source: ${c.source}`);
     }
     console.log();
   }
 
+  printSection('ACCEPTANCE CRITERIA', acItems);
+  printSection('API ENDPOINTS', endpointItems);
+  printSection('DATA ENTITIES', entityItems);
+  printSection('STATE TRANSITIONS', transitionItems);
+  printSection('UI FLOWS', flowItems);
+
   if (orphanRefs.length > 0) {
-    console.log('ORPHAN REFERENCES (tests reference ACs not found in docs/specs):');
+    console.log('ORPHAN REFERENCES (tests reference items not found in docs/specs):');
     for (const r of orphanRefs) {
       console.log(`  ? ${r.criterionId} referenced in ${r.testFile}`);
     }
@@ -264,10 +456,17 @@ async function main() {
       specFiles: (await findFiles(specsDir, /\.md$/)).length,
       testFiles: testFileCount,
       testCases: testCount,
-      totalCriteria: criteria.length,
-      coveredCriteria: covered.length,
-      uncoveredCriteria: uncovered.length,
-      coveragePercent: criteria.length > 0 ? Math.round(covered.length / criteria.length * 100) : 0,
+      totalItems: allSpecItems.length,
+      coveredItems: covered.length,
+      uncoveredItems: uncovered.length,
+      coveragePercent: allSpecItems.length > 0 ? Math.round(covered.length / allSpecItems.length * 100) : 0,
+      byType: {
+        acceptanceCriteria: { total: acItems.length, covered: acItems.filter(c => c.covered).length },
+        apiEndpoints: { total: endpointItems.length, covered: endpointItems.filter(c => c.covered).length },
+        dataEntities: { total: entityItems.length, covered: entityItems.filter(c => c.covered).length },
+        stateTransitions: { total: transitionItems.length, covered: transitionItems.filter(c => c.covered).length },
+        uiFlows: { total: flowItems.length, covered: flowItems.filter(c => c.covered).length },
+      },
     },
     covered,
     uncovered,
