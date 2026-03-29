@@ -1,8 +1,28 @@
 # Changelog
 
 All skills in this pipeline are versioned together. Each release applies to
-all five phases. Use git tags (e.g., `v1.1.0`) to pin a specific version in
+all six phases. Use git tags (e.g., `v1.1.0`) to pin a specific version in
 your project's submodule.
+
+## v1.3.0 — 2026-03-29
+
+### Added
+- **Phase 0 (tdd-0-init):** New project initialisation skill. Runs once per project to create the `docs/specs/` directory, canonical spec documents, READMEs, and roadmap. Templates and assets moved here from Phase 1.
+- Phase 1: "Single Source of Truth" rule — one `requirements.md` per project, global monotonically increasing AC numbers, no file-per-feature or file-per-cycle.
+- Phase 1: "No Unspec'd Work" rule — bugs and improvements discovered during implementation must get an AC (tagged `[HOTFIX]` or `[DISCOVERED]`) and a test before being implemented.
+- Phase 1: "Supersession Protocol" — strike through old ACs when requirements change, reference replacements, keep all spec files consistent.
+- Phase 1: "Living Documents" pattern — after each cycle, update specs to reflect current state, move completed ACs to History section, use status indicators.
+- Phase 1: "Interview is NOT Optional" — draft ACs must be presented and confirmed even when chaining phases.
+- Phase 1: "Multi-Cycle Sessions" — re-read requirements.md before each cycle, use test suite as feature inventory.
+- Phase 3: "No Unspec'd Work" rule cross-referenced from Phase 1.
+- Phase 5: "Living Document Update" evaluation dimension — verify specs reflect current state after each cycle.
+
+### Changed
+- Phase 1 is now a focused per-cycle requirements skill. Project initialisation, templates, doc structure setup, and infrastructure interview checklist moved to Phase 0.
+- Phase 1 no longer carries template assets — templates live in `tdd-0-init/assets/`.
+- Pipeline is now 6 phases (0-5) instead of 5 (1-5).
+- README updated to reflect 6-phase pipeline and new usage flow.
+- All SKILL.md frontmatter: pipeline-version bumped to 1.3.0.
 
 ## v1.2.0 — 2026-03-29
 

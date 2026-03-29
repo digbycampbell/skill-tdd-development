@@ -4,7 +4,7 @@ description: "Phase 3 of a TDD development pipeline. Use this skill to write imp
 license: MIT
 metadata:
   author: user
-  pipeline-version: "1.2.0"
+  pipeline-version: "1.3.0"
   pipeline-phase: "3"
 ---
 
@@ -140,6 +140,18 @@ All tests pass. At this point:
 
 - Commit-sized chunks are ideal. After each group of related tests goes green, that's
   a natural commit point. Mention this to the user — they may want to commit.
+
+## Unplanned Changes — No Unspec'd Work
+
+If during implementation you discover a bug or improvement that needs addressing:
+
+1. STOP and add it as a new AC in `docs/specs/requirements.md` with the next
+   available number, marked as `[HOTFIX]` or `[DISCOVERED]`.
+2. Write a test for it (even a minimal one).
+3. Then implement it.
+
+Never commit a behavioural change that doesn't trace to an AC. "I fixed it
+while I was in there" creates untraceable changes that can't be verified later.
 
 ## File Placement
 

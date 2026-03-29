@@ -1,16 +1,19 @@
 # TDD Development Pipeline — Agent Skills
 
-A set of 5 [Agent Skills](https://agentskills.io) that guide AI coding agents through a structured Test-Driven Development workflow.
+A set of 6 [Agent Skills](https://agentskills.io) that guide AI coding agents through a structured Test-Driven Development workflow.
 
 ## The Pipeline
 
 | Phase | Skill | What it does |
 |-------|-------|-------------|
-| 1 | `tdd-1-requirements` | Interview, capture requirements, produce spec documents in `docs/specs/` |
+| 0 | `tdd-0-init` | Set up project docs structure, create initial specs and roadmap (run once) |
+| 1 | `tdd-1-requirements` | Interview, capture per-cycle requirements, update canonical specs |
 | 2 | `tdd-2-test-design` | Write failing tests derived from the specs (the "Red" phase) |
 | 3 | `tdd-3-implement` | Write minimum code to make tests pass (the "Green" phase) |
 | 4 | `tdd-4-refactor` | Clean up code while keeping tests green |
 | 5 | `tdd-5-evaluate` | Assess coverage, spec drift, and decide what to cycle on next |
+
+**Phase 0** runs once per project to create the `docs/specs/` directory, canonical `requirements.md`, concern documents (architecture, data model, API, UI, etc.), roadmap, and READMEs. **Phase 1** then runs at the start of each TDD cycle to add new acceptance criteria for the current feature.
 
 Each phase produces artifacts that feed the next. Specs live in `docs/specs/` as markdown files committed to your repo. Tests trace back to acceptance criteria via `AC-N` references. The evaluate phase closes the loop by telling you which phase to re-enter.
 
@@ -61,7 +64,7 @@ git submodule add https://github.com/digbycampbell/skill-tdd-development.git .cl
 git commit -m "Add TDD development pipeline skills"
 ```
 
-The 5 skills are now available in Claude Code via `/tdd-1-requirements`, `/tdd-2-test-design`, etc.
+The 6 skills are now available in Claude Code via `/tdd-0-init`, `/tdd-1-requirements`, `/tdd-2-test-design`, etc.
 
 ### Cloning a project that already has the submodule
 
@@ -91,7 +94,8 @@ git commit -m "Update TDD skills to latest"
 Once installed, invoke each phase in Claude Code:
 
 ```
-/tdd-1-requirements    # Start here — spec out what you're building
+/tdd-0-init            # Run once — set up docs structure and initial specs
+/tdd-1-requirements    # Each cycle — spec out what you're building
 /tdd-2-test-design     # Write tests based on the specs
 /tdd-3-implement       # Make the tests pass
 /tdd-4-refactor        # Clean up with tests as safety net
@@ -100,17 +104,17 @@ Once installed, invoke each phase in Claude Code:
 
 ### For an existing messy project
 
-You don't have to spec the entire app at once. Pick the messiest or most critical area, run one full cycle (phases 1–5) on just that piece, then pick the next piece.
+Run `/tdd-0-init` first to set up the docs structure. Then pick the messiest or most critical area, run one full cycle (phases 1-5) on just that piece, then pick the next piece.
 
 ### For a new project
 
-Start with `/tdd-1-requirements`. The skill will interview you, create the `docs/specs/` directory with structured spec documents, and generate README files that make the documentation discoverable on GitHub.
+Start with `/tdd-0-init`. The skill will interview you, create the `docs/specs/` directory with structured spec documents, and generate README files that make the documentation discoverable on GitHub. Then run `/tdd-1-requirements` to add cycle-specific acceptance criteria.
 
 ## What's in Each Skill
 
 ```
-tdd-1-requirements/
-├── SKILL.md              ← Requirements capture instructions
+tdd-0-init/
+├── SKILL.md              ← Project initialisation instructions
 └── assets/               ← Spec document templates + README templates
     ├── requirements.md
     ├── architecture.md
@@ -119,8 +123,14 @@ tdd-1-requirements/
     ├── auth.md
     ├── ui.md
     ├── integration.md
+    ├── infrastructure.md
     ├── docs-readme.md
-    └── specs-readme.md
+    ├── specs-readme.md
+    ├── roadmap.md
+    └── root-readme.md
+
+tdd-1-requirements/
+└── SKILL.md              ← Per-cycle requirements capture instructions
 
 tdd-2-test-design/
 ├── SKILL.md              ← Test design instructions

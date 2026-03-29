@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires Node.js for traceability script. Project should use Vitest, Jest, or Playwright.
 metadata:
   author: user
-  pipeline-version: "1.2.0"
+  pipeline-version: "1.3.0"
   pipeline-phase: "2"
 ---
 

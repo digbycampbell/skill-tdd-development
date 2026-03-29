@@ -4,7 +4,7 @@ description: "Phase 5 of a TDD development pipeline. Use this skill to evaluate 
 license: MIT
 metadata:
   author: user
-  pipeline-version: "1.2.0"
+  pipeline-version: "1.3.0"
   pipeline-phase: "5"
 ---
 
@@ -167,7 +167,18 @@ Based on the above, recommend the next action. Be specific:
 - **If there's a natural next feature** that builds on this one → note it as a
   candidate for a new Phase 1 cycle
 
-After making recommendations, update the project documentation:
+### 6. Living Document Update — "Are the specs current?"
+
+After evaluation, update the canonical specs to reflect the CURRENT state of the software:
+
+- `requirements.md` should read as "what the software does NOW", not as a
+  history of what was built when.
+- Move completed ACs to a `## History` section at the bottom.
+- Mark each AC with its status: ✅ Implemented and tested, 🚧 In progress, 📋 Planned.
+- If any behavioural changes were made without a corresponding AC, flag them as
+  spec drift and recommend adding retroactive ACs in Phase 1.
+
+Then update the project documentation:
 
 **`docs/ROADMAP.md`** — if it exists:
 - Mark the current cycle's item as 🟢 Complete and move it to the Completed table
