@@ -4,7 +4,7 @@ description: "Phase 1 of a TDD development pipeline. Use this skill when startin
 license: MIT
 metadata:
   author: user
-  pipeline-version: "1.1.0"
+  pipeline-version: "1.2.0"
   pipeline-phase: "1"
 ---
 

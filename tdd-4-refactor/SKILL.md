@@ -4,7 +4,7 @@ description: "Phase 4 of a TDD development pipeline. Use this skill to refactor 
 license: MIT
 metadata:
   author: user
-  pipeline-version: "1.1.0"
+  pipeline-version: "1.2.0"
   pipeline-phase: "4"
 ---
 
@@ -32,6 +32,86 @@ a feature, stop — that belongs in a new cycle (back to Phase 1 or 2).
 ## What to Look For
 
 Work through these categories in order. Each one is a pass through the codebase.
+Pass 0 runs first and is deliberately aggressive — the philosophy is "delete it, the
+tests will tell you if you were wrong, and git will remember it if you need it back."
+
+### Pass 0: Dead Code Removal
+
+Before improving structure, remove everything that isn't earning its keep. Dead code
+is not harmless — it misleads readers, creates false dependencies, and slows down every
+future refactoring. Be aggressive. If you aren't sure something is used, delete it and
+run the tests. If they pass, it was dead.
+
+Sweep the entire codebase for each of these categories:
+
+- **Unused exports** — functions, classes, constants, or components that are exported but
+  never imported anywhere else in the codebase. Search all import statements; if nothing
+  references it, delete it.
+- **Unused imports** — imports at the top of a file that nothing in the file actually uses.
+  Your editor or linter may flag these, but verify manually too.
+- **Unreachable code** — code after early returns, inside conditions that can never be true,
+  in branches guarded by constants, or behind feature flags that are permanently off.
+- **Commented-out code** — code in comments is not documentation, it's clutter. If it was
+  important, it's in git history. Delete it. (Genuine explanatory comments are fine — the
+  target is code-in-comments like `// const oldHandler = ...` or `/* TODO: re-enable
+  this block */`.)
+- **Unused variables and parameters** — declared but never read. For function parameters
+  that are part of a required interface signature (e.g., Express middleware `(req, res, next)`),
+  prefix with underscore rather than removing.
+- **Vestigial files** — files that are no longer imported or referenced by any other file,
+  route, config, or build step. Check thoroughly before deleting: search for the filename
+  (without extension) across the codebase, including dynamic imports, lazy routes, and
+  config files.
+- **Stale configuration** — environment variables referenced in config but never read by
+  code, build targets that are never invoked, scripts in `package.json` that no longer
+  work or are never run.
+- **Obsolete types** — TypeScript interfaces, type aliases, or enums that are defined but
+  never used as a type annotation, generic parameter, or runtime value anywhere.
+- **Dead API routes** — endpoints that are registered in the router but have no
+  corresponding tests, no client code that calls them, and no documentation. If a route
+  exists only because "it might be useful later," it's dead.
+
+**The rhythm for Pass 0:**
+
+1. Identify a candidate for removal.
+2. Delete it.
+3. Run the tests.
+4. If tests pass → it was dead. Move on.
+5. If tests fail → undo the deletion. It's alive. Move on.
+
+**Removal Report:**
+
+At the end of Pass 0, produce a removal report listing every deletion with a
+one-line justification. Group by category:
+
+```
+## Dead Code Removal Report
+
+### Unused Exports
+- `src/utils/formatCurrency.ts` → `formatCurrency()` — exported but never imported
+- `src/hooks/useDebounce.ts` → entire file — no imports found anywhere
+
+### Commented-Out Code
+- `src/api/routes/users.ts:45-62` — commented-out legacy validation block
+
+### Unused Variables
+- `src/services/auth.ts:12` → `const DEFAULT_TIMEOUT` — declared, never read
+
+### Vestigial Files
+- `src/components/OldDashboard.tsx` — no imports, not in any route config
+
+### Uncertain (kept, flagged for Phase 5 review)
+- `src/utils/retry.ts` — no static imports, but may be used via dynamic import;
+  couldn't confirm. Kept for now.
+```
+
+Items you cannot definitively confirm as dead (e.g., dynamically referenced, used by
+external consumers, or referenced only in ways that are hard to trace statically) should
+be listed in the "Uncertain" section rather than deleted. Phase 5 will make the final call
+on these.
+
+After Pass 0 is complete and the removal report is written, proceed to the structural
+refactoring passes below.
 
 ### Pass 1: Duplication
 

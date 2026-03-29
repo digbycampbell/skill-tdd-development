@@ -4,7 +4,7 @@ description: "Phase 5 of a TDD development pipeline. Use this skill to evaluate 
 license: MIT
 metadata:
   author: user
-  pipeline-version: "1.1.0"
+  pipeline-version: "1.2.0"
   pipeline-phase: "5"
 ---
 
@@ -104,10 +104,47 @@ If drift exists, note each instance and whether the spec or the code should be u
 
 ### 4. Code Health — "Is the codebase in good shape?"
 
-A quick structural review (complementing Phase 4's detailed refactoring):
+A structural review that specifically verifies Phase 4's dead code removal was thorough,
+then checks broader code health.
+
+#### 4a. Dead Code Verification
+
+Phase 4's Pass 0 should have aggressively removed dead code. Your job is to verify it
+actually did. Perform an independent sweep for dead code survivors:
+
+- **Unused exports** — functions, classes, constants exported but never imported elsewhere
+- **Unused imports** — imports that nothing in the file references
+- **Commented-out code** — code-in-comments that should have been deleted
+- **Unreachable branches** — code behind impossible conditions or after early returns
+- **Vestigial files** — files with no inbound imports or references
+- **Obsolete types** — interfaces, type aliases, or enums that are defined but never used
+- **Dead API routes** — registered endpoints with no tests, no callers, no docs
+- **Stale config** — unused env vars, dead package.json scripts, orphaned build targets
+
+If Phase 4 produced a "Dead Code Removal Report," review it:
+- Were the deletions justified?
+- Did it miss anything you can find?
+- Review the "Uncertain" items and make a definitive call on each one — either confirm
+  it's alive (with evidence: where it's used) or flag it for deletion.
+
+**If dead code survivors are found:** This is a significant finding. Recommend sending
+the codebase back to Phase 4 for another Pass 0 before proceeding with Phase 5's other
+recommendations. Dead code should not survive two passes through the Phase 4 → Phase 5
+loop without being either deleted or explicitly justified with evidence that it's alive.
+
+List every survivor with its location and why it should be removed:
+```
+## Dead Code Survivors
+- `src/utils/legacyFormat.ts` → `legacyFormat()` — exported, zero imports found
+- `src/components/DeprecatedBanner.tsx` — entire file, no route or import references
+- `src/api/middleware/oldAuth.ts:23-41` — commented-out token refresh block
+```
+
+#### 4b. General Code Health
+
+Beyond dead code, check:
 
 - Are there TODO/FIXME/HACK comments that need attention?
-- Any dead code (unused functions, unreachable branches)?
 - Are dependencies up to date and appropriate?
 - Is the project structure consistent and navigable?
 - Any security concerns visible at a glance?
@@ -116,6 +153,9 @@ A quick structural review (complementing Phase 4's detailed refactoring):
 
 Based on the above, recommend the next action. Be specific:
 
+- **If dead code survivors were found** → recommend returning to Phase 4 for another
+  Pass 0 before any other work. Dead code removal is the highest-priority loop-back
+  because dead code actively misleads all other evaluation dimensions.
 - **If coverage gaps exist** → list exactly which specs need tests, recommend returning
   to Phase 2 for those specific items
 - **If spec drift exists** → recommend returning to Phase 1 to update the specs, then
