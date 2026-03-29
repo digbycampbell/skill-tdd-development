@@ -4,7 +4,7 @@ description: "Phase 1 of a TDD development pipeline. Use this skill when startin
 license: MIT
 metadata:
   author: user
-  pipeline-version: "1.2.0"
+  pipeline-version: "1.3.0"
   pipeline-phase: "1"
 ---
 
@@ -316,6 +316,90 @@ Note: the roadmap template goes to `docs/ROADMAP.md` (alongside specs/, not insi
 - It's fine to create a spec document with some sections marked as "TBD — to be determined
   during implementation." Not everything can be known upfront, and acknowledging that is
   better than guessing.
+
+## Spec File Strategy — Single Source of Truth
+
+Maintain ONE canonical requirements file per project: `docs/specs/requirements.md`.
+This is the single source of truth for what the software does.
+
+When starting a new cycle:
+- Do NOT create a new requirements file. Instead, ADD a new section to the
+  existing `docs/specs/requirements.md` under a cycle heading.
+- AC numbers are GLOBAL and monotonically increasing across cycles. If the
+  previous cycle ended at AC-15, the next cycle starts at AC-16.
+- If a new cycle supersedes an earlier AC, mark the old one as
+  `~~AC-3: [old text]~~ — SUPERSEDED by AC-22` rather than silently replacing it.
+
+Only create separate spec files for distinct CONCERNS (architecture.md, ui.md,
+api.md) — never for separate features or cycles. A feature touches multiple
+concerns, not a new file per feature.
+
+## Unplanned Changes — No Unspec'd Work
+
+If during implementation (Phase 3) or evaluation (Phase 5) you discover a
+bug or improvement that needs addressing:
+
+1. STOP and add it as a new AC in `docs/specs/requirements.md` with the next
+   available number, marked as `[HOTFIX]` or `[DISCOVERED]`.
+2. Write a test for it (even a minimal one).
+3. Then implement it.
+
+Never commit a behavioural change that doesn't trace to an AC. "I fixed it
+while I was in there" creates untraceable changes that can't be verified later.
+
+## When Requirements Change — Supersession Protocol
+
+When the user changes a previously-specified requirement:
+
+1. In the canonical requirements.md, strike through the old AC and add a
+   new one referencing it:
+   ```
+   ~~AC-7: Paddock unavailable for 22 days after grazing~~ — REPLACED BY AC-25
+   AC-25: No minimum rotation period — algorithm picks longest-rested paddock.
+   ```
+2. Update the test that covered the old AC to match the new behaviour.
+3. If the change affects architecture.md, ui.md, or api.md, update those
+   too — but always update requirements.md FIRST.
+4. Never leave two spec files with contradictory statements.
+
+## Document Lifecycle — Living Documents
+
+Spec documents are LIVING documents, not append-only logs.
+
+After each cycle completes (Phase 5), update the canonical specs to reflect
+the CURRENT state of the software:
+
+- `requirements.md` should read as "what the software does NOW", not as a
+  history of what was built when.
+- Move completed/superseded ACs to a `## History` section at the bottom,
+  not inline where they clutter the current spec.
+- Each AC should be in one of three states:
+  - ✅ Implemented and tested
+  - 🚧 In progress (current cycle)
+  - 📋 Planned (future cycle)
+
+The ROADMAP.md is where cycle history lives. Requirements.md is the current
+truth.
+
+## Interview is NOT Optional
+
+Even when the user says "just do it" or "chain all phases together", Phase 1
+MUST present the draft ACs to the user and get explicit confirmation before
+proceeding. A 30-second review by the user catches assumptions that would cost
+hours to fix in Phase 3.
+
+Minimum viable interview: Present the AC list and ask "Does this match what
+you want? Anything missing or wrong?" Wait for confirmation.
+
+## Multi-Cycle Sessions
+
+When running multiple TDD cycles in one session:
+
+1. Before starting each new cycle, re-read `docs/specs/requirements.md` to
+   understand the current state. Do not rely on conversation memory.
+2. After each cycle, update requirements.md to reflect what was just built.
+3. The test suite is the ground truth for what exists — run the test command
+   and read the test names as a feature inventory.
 
 ## Scope Check
 
