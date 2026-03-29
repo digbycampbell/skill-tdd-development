@@ -4,7 +4,7 @@ description: "Phase 4 of a TDD development pipeline. Use this skill to refactor 
 license: MIT
 metadata:
   author: user
-  pipeline-version: "1.2.0"
+  pipeline-version: "1.3.0"
   pipeline-phase: "4"
 ---
 
