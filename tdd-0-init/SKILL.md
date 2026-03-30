@@ -1,10 +1,10 @@
 ---
 name: tdd-0-init
-description: "Phase 0 of a TDD development pipeline. Use this skill to initialise a new project's documentation structure or add new concern documents to an existing project. Invoke when the user says \"init\", \"initialise\", \"set up docs\", \"new project\", \"phase 0\", or when starting a project that has no docs/specs/ directory yet. This skill creates the canonical spec documents, READMEs, and roadmap. Run once per project, or re-run to add new concern documents."
+description: "Phase 0 of a TDD development pipeline. Use this skill to initialise a new project's documentation structure or add new concern documents to an existing project. Invoke when the user says \"init\", \"initialise\", \"set up docs\", \"new project\", \"phase 0\", or when starting a project that has no docs/ directory yet. This skill creates the canonical spec documents, READMEs, and roadmap. Run once per project, or re-run to add new concern documents."
 license: MIT
 metadata:
   author: user
-  pipeline-version: "1.3.0"
+  pipeline-version: "1.4.0"
   pipeline-phase: "0"
 ---
 
@@ -15,7 +15,7 @@ project, then create the foundational documentation structure that all TDD cycle
 build on.
 
 This phase runs ONCE per project (or re-runs to add new concern documents). It creates
-the `docs/specs/` directory, the canonical `requirements.md`, any relevant concern
+the `docs/` directory, the canonical `requirements.md`, any relevant concern
 documents, the roadmap, and the README scaffolding.
 
 Do not write any code. Do not write tests. This phase is purely about establishing the
@@ -23,24 +23,24 @@ documentation foundation.
 
 ## When to Run This Phase
 
-- **New project:** No `docs/specs/` directory exists yet.
+- **New project:** No `docs/` directory exists yet.
 - **Adding a new concern:** The project has specs but needs a new concern document
   (e.g., adding `auth.md` to a project that didn't originally need it).
 - **Major pivot:** The project's scope has changed so fundamentally that the existing
   docs structure needs rethinking.
 
-If `docs/specs/requirements.md` already exists and you just need to add ACs for a new
+If `docs/requirements.md` already exists and you just need to add ACs for a new
 cycle, skip this phase and go straight to Phase 1 (Requirements).
 
 ## Specification Documents
 
-All specs live in a `docs/specs/` directory at the project root. Each document captures a
+All specs live in a `docs/` directory at the project root. Each document captures a
 distinct concern. Not every project needs every document — but you should actively consider
 each one and create it if relevant.
 
 The documents are:
 
-### `docs/specs/requirements.md` — ALWAYS created
+### `docs/requirements.md` — ALWAYS created
 The functional requirements. What the software must do from the user's perspective.
 Structure it as:
 
@@ -63,7 +63,7 @@ What this feature explicitly does NOT do. This is just as important as what it d
 because it prevents scope creep and tells the implementer where to stop.
 ```
 
-### `docs/specs/architecture.md` — Created when the feature involves multiple components
+### `docs/architecture.md` — Created when the feature involves multiple components
 How the pieces fit together. Not implementation detail — structural decisions.
 
 ```
@@ -87,7 +87,7 @@ This is the most valuable part — it prevents future-you from revisiting settle
 decisions without context.
 ```
 
-### `docs/specs/data-model.md` — Created when the feature persists or transforms data
+### `docs/data-model.md` — Created when the feature persists or transforms data
 What the data looks like, where it lives, how it relates.
 
 ```
@@ -109,7 +109,7 @@ Where data lives (database tables, localStorage, API responses, etc.)
 and any caching or synchronisation considerations.
 ```
 
-### `docs/specs/api.md` — Created when the feature exposes or consumes APIs
+### `docs/api.md` — Created when the feature exposes or consumes APIs
 The contract between client and server (or between services).
 
 ```
@@ -128,7 +128,7 @@ Standard error response format. Common error codes and what they mean.
 How the client should handle each category of error.
 ```
 
-### `docs/specs/auth.md` — Created when the feature involves identity, permissions, or security
+### `docs/auth.md` — Created when the feature involves identity, permissions, or security
 Authentication and authorisation as a dedicated concern.
 
 ```
@@ -147,7 +147,7 @@ Sensitive data handling, input validation, CSRF/XSS concerns, rate limiting,
 anything that could go wrong if an attacker tried.
 ```
 
-### `docs/specs/ui.md` — Created when the feature has user-facing interface
+### `docs/ui.md` — Created when the feature has user-facing interface
 What the user sees and interacts with, including the styling approach and design system.
 
 ```
@@ -175,7 +175,7 @@ Reusable UI components this feature needs. Note which already exist in the
 codebase and which need to be created.
 ```
 
-### `docs/specs/integration.md` — Created when the feature depends on external services
+### `docs/integration.md` — Created when the feature depends on external services
 Third-party APIs, services, or systems the feature talks to.
 
 ```
@@ -192,7 +192,7 @@ What breaks when the external service is slow, down, or returns unexpected data.
 How the feature degrades gracefully.
 ```
 
-### `docs/specs/infrastructure.md` — Created when the project is deployed or hosted
+### `docs/infrastructure.md` — Created when the project is deployed or hosted
 Where the application runs, how it's built and deployed, and what platform constraints
 affect implementation decisions.
 
@@ -252,7 +252,7 @@ in Phase 3 implementation.
 
 This skill bundles template files in `assets/` for each spec document type.
 When creating a new spec document, copy the relevant template from this skill's
-`assets/` directory into the project's `docs/specs/` directory, then fill it in.
+`assets/` directory into the project's `docs/` directory, then fill it in.
 
 The templates contain the correct structure, placeholder text, and markdown tables
 ready to be populated. This ensures consistency across projects and saves time
@@ -260,18 +260,16 @@ reconstructing the format.
 
 To copy a template:
 ```bash
-cp assets/requirements.md docs/specs/requirements.md
+cp assets/requirements.md docs/requirements.md
 ```
 
 Available templates: `requirements.md`, `architecture.md`, `data-model.md`,
 `api.md`, `auth.md`, `ui.md`, `integration.md`, `infrastructure.md`,
-`docs-readme.md`, `specs-readme.md`, `roadmap.md`, `root-readme.md`.
-
-Note: the roadmap template goes to `docs/ROADMAP.md` (alongside specs/, not inside it).
+`docs-readme.md`, `roadmap.md`, `root-readme.md`.
 
 ## Your Process
 
-1. **Check for existing `docs/specs/` directory.** If one exists and has content,
+1. **Check for existing `docs/` directory.** If one exists and has content,
    this project may have already been initialised. Ask the user if they want to
    add a new concern document or re-initialise. Do not overwrite existing docs
    without explicit confirmation.
@@ -303,16 +301,13 @@ Note: the roadmap template goes to `docs/ROADMAP.md` (alongside specs/, not insi
 
 6. **Generate the README files and roadmap.** After the spec documents are finalised:
 
-   **`docs/specs/README.md`** — a table of contents for the specs directory. Use the
-   template at `assets/specs-readme.md`. List every spec document created, with a
-   one-line description and a status indicator (✅ Current, 🚧 Draft, or 📋 Planned).
+   **`docs/README.md`** — a documentation index listing every spec document with a
+   one-line description and status indicator (✅ Current, 🚧 Draft, or 📋 Planned).
+   Use the template at `assets/docs-readme.md`.
 
    **`docs/ROADMAP.md`** — a prioritised plan for what to work on and in what order.
    Use the template at `assets/roadmap.md`. Populate it with the features identified
    during the interview, ordered by priority with sequencing rationale.
-
-   **`docs/README.md`** — a top-level docs landing page. Use the template at
-   `assets/docs-readme.md`.
 
    Also check whether the project's **root `README.md`** exists and links to `docs/`.
    If no root README exists, create one using the template at `assets/root-readme.md`.

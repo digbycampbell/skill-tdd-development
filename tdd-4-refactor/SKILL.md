@@ -4,7 +4,7 @@ description: "Phase 4 of a TDD development pipeline. Use this skill to refactor 
 license: MIT
 metadata:
   author: user
-  pipeline-version: "1.3.0"
+  pipeline-version: "1.4.0"
   pipeline-phase: "4"
 ---
 
@@ -146,7 +146,7 @@ Each function should do one thing. Each module should own one concern. Look for:
 - Modules that import from too many other modules → may be doing too much
 - Circular or tangled dependencies → restructure to have clear dependency direction
 
-Check against `docs/specs/architecture.md` if it exists — the code structure should reflect
+Check against `docs/architecture.md` if it exists — the code structure should reflect
 the architectural decisions documented there.
 
 ### Pass 4: Error Handling
@@ -158,7 +158,7 @@ Phase 3 often leaves error handling minimal. Look for:
 - User-facing error messages that expose internal details
 - Missing validation at system boundaries (API inputs, form data, external API responses)
 
-Refer to `docs/specs/api.md` for the expected error response format if applicable.
+Refer to `docs/api.md` for the expected error response format if applicable.
 
 ### Pass 5: Type Safety and Contracts
 

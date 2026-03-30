@@ -177,8 +177,8 @@ await user.type(screen.getByRole('textbox'), 'hello')
 ```typescript
 /**
  * Tests for: [Feature Name]
- * Spec: specs/requirements.md — AC-1, AC-2
- * Spec: specs/api.md — POST /api/items
+ * Spec: docs/requirements.md — AC-1, AC-2
+ * Spec: docs/api.md — POST /api/items
  */
 
 describe('[Component/Module]', () => {

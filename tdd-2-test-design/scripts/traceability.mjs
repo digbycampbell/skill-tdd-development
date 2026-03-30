@@ -3,7 +3,7 @@
 /**
  * Spec-to-Test Traceability Checker
  *
- * Scans docs/specs/ for testable items and test files for spec references,
+ * Scans docs/ for testable items and test files for spec references,
  * then reports which items have test coverage and which don't.
  *
  * Tracks:
@@ -18,14 +18,14 @@
  * Defaults to current directory if no project root is given.
  *
  * Output: a coverage report to stdout and a JSON file at
- *   docs/specs/traceability-report.json
+ *   docs/traceability-report.json
  */
 
 import { readdir, readFile, writeFile, stat } from 'fs/promises';
 import { join, relative } from 'path';
 
 const projectRoot = process.argv[2] || process.cwd();
-const specsDir = join(projectRoot, 'docs', 'specs');
+const specsDir = join(projectRoot, 'docs');
 
 // --- Helpers ---
 
@@ -62,7 +62,7 @@ async function extractAcceptanceCriteria() {
   const criteria = [];
 
   if (!(await fileExists(specsDir))) {
-    console.error('No docs/specs/ directory found at', specsDir);
+    console.error('No docs/ directory found at', specsDir);
     process.exit(1);
   }
 
@@ -242,7 +242,7 @@ async function extractTestReferences() {
     const content = await readFile(file, 'utf-8');
     const relPath = relative(projectRoot, file);
 
-    // Match "Spec: docs/specs/requirements.md — AC-1, AC-2, AC-3"
+    // Match "Spec: docs/requirements.md — AC-1, AC-2, AC-3"
     const specRefPattern = /Spec:\s*([^\n—-]+?)(?:\s*[—-]\s*(.+))?$/gm;
     let match;
     while ((match = specRefPattern.exec(content)) !== null) {
@@ -386,7 +386,7 @@ async function main() {
   const covered = coverage.filter(c => c.covered);
   const uncovered = coverage.filter(c => !c.covered);
 
-  // Orphan references — tests referencing items that don't exist in docs/specs
+  // Orphan references — tests referencing items that don't exist in docs
   const specItemIds = new Set(allSpecItems.map(c => c.id));
   const orphanRefs = references.filter(r => r.criterionId && !specItemIds.has(r.criterionId));
 
@@ -442,7 +442,7 @@ async function main() {
   printSection('UI FLOWS', flowItems);
 
   if (orphanRefs.length > 0) {
-    console.log('ORPHAN REFERENCES (tests reference items not found in docs/specs):');
+    console.log('ORPHAN REFERENCES (tests reference items not found in docs):');
     for (const r of orphanRefs) {
       console.log(`  ? ${r.criterionId} referenced in ${r.testFile}`);
     }

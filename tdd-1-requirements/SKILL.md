@@ -1,10 +1,10 @@
 ---
 name: tdd-1-requirements
-description: "Phase 1 of a TDD development pipeline. Use this skill at the start of each TDD cycle to capture requirements for the current feature or change. Invoke when the user says \"requirements\", \"new feature\", \"spec out\", \"let's plan\", \"phase 1\", \"new cycle\", or anything indicating they want to define what to build. This skill updates the existing docs/specs/requirements.md with new acceptance criteria. Assumes Phase 0 has already set up the docs structure."
+description: "Phase 1 of a TDD development pipeline. Use this skill at the start of each TDD cycle to capture requirements for the current feature or change. Invoke when the user says \"requirements\", \"new feature\", \"spec out\", \"let's plan\", \"phase 1\", \"new cycle\", or anything indicating they want to define what to build. This skill updates the existing docs/requirements.md with new acceptance criteria. Assumes Phase 0 has already set up the docs structure."
 license: MIT
 metadata:
   author: user
-  pipeline-version: "1.3.0"
+  pipeline-version: "1.4.0"
   pipeline-phase: "1"
 ---
 
@@ -17,17 +17,17 @@ new acceptance criteria.
 Do not write any code. Do not write tests. This phase is purely about understanding and
 documenting the problem for the current cycle.
 
-**Prerequisite:** The `docs/specs/` directory and canonical `requirements.md` should
+**Prerequisite:** The `docs/` directory and canonical `requirements.md` should
 already exist (created by Phase 0). If they don't exist, tell the user to run
 `/tdd-0-init` first.
 
 ## Before You Start
 
-1. **Re-read `docs/specs/requirements.md`.** This is the single source of truth. Understand
+1. **Re-read `docs/requirements.md`.** This is the single source of truth. Understand
    the current state — what's been built, what ACs exist, what their statuses are. Do not
    rely on conversation memory.
 
-2. **Read other relevant spec documents** in `docs/specs/` (architecture, data-model, api,
+2. **Read other relevant spec documents** in `docs/` (architecture, data-model, api,
    ui, etc.) to understand the full context.
 
 3. **Read `docs/ROADMAP.md`** if it exists, to understand where this cycle fits in the plan.
@@ -40,12 +40,12 @@ already exist (created by Phase 0). If they don't exist, tell the user to run
 
 ## Spec File Strategy — Single Source of Truth
 
-Maintain ONE canonical requirements file per project: `docs/specs/requirements.md`.
+Maintain ONE canonical requirements file per project: `docs/requirements.md`.
 This is the single source of truth for what the software does.
 
 When starting a new cycle:
 - Do NOT create a new requirements file. Instead, ADD a new section to the
-  existing `docs/specs/requirements.md` under a cycle heading.
+  existing `docs/requirements.md` under a cycle heading.
 - AC numbers are GLOBAL and monotonically increasing across cycles. If the
   previous cycle ended at AC-15, the next cycle starts at AC-16.
 - If a new cycle supersedes an earlier AC, mark the old one as
@@ -77,7 +77,7 @@ you want? Anything missing or wrong?" Wait for confirmation.
 3. **Present the draft ACs to the user.** This is mandatory. Wait for confirmation.
    The user may correct assumptions, add missing criteria, or reprioritise.
 
-4. **Update `docs/specs/requirements.md`.** Add the new ACs under a cycle heading:
+4. **Update `docs/requirements.md`.** Add the new ACs under a cycle heading:
    ```
    ## Cycle N: [Feature Name]
 
@@ -113,7 +113,7 @@ When the user changes a previously-specified requirement:
 If during implementation (Phase 3) or evaluation (Phase 5) you discover a
 bug or improvement that needs addressing:
 
-1. STOP and add it as a new AC in `docs/specs/requirements.md` with the next
+1. STOP and add it as a new AC in `docs/requirements.md` with the next
    available number, marked as `[HOTFIX]` or `[DISCOVERED]`.
 2. Write a test for it (even a minimal one).
 3. Then implement it.
@@ -144,7 +144,7 @@ truth.
 
 When running multiple TDD cycles in one session:
 
-1. Before starting each new cycle, re-read `docs/specs/requirements.md` to
+1. Before starting each new cycle, re-read `docs/requirements.md` to
    understand the current state. Do not rely on conversation memory.
 2. After each cycle, update requirements.md to reflect what was just built.
 3. The test suite is the ground truth for what exists — run the test command

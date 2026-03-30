@@ -13,9 +13,9 @@ A set of 6 [Agent Skills](https://agentskills.io) that guide AI coding agents th
 | 4 | `tdd-4-refactor` | Clean up code while keeping tests green |
 | 5 | `tdd-5-evaluate` | Assess coverage, spec drift, and decide what to cycle on next |
 
-**Phase 0** runs once per project to create the `docs/specs/` directory, canonical `requirements.md`, concern documents (architecture, data model, API, UI, etc.), roadmap, and READMEs. **Phase 1** then runs at the start of each TDD cycle to add new acceptance criteria for the current feature.
+**Phase 0** runs once per project to create the `docs/` directory, canonical `requirements.md`, concern documents (architecture, data model, API, UI, etc.), roadmap, and READMEs. **Phase 1** then runs at the start of each TDD cycle to add new acceptance criteria for the current feature.
 
-Each phase produces artifacts that feed the next. Specs live in `docs/specs/` as markdown files committed to your repo. Tests trace back to acceptance criteria via `AC-N` references. The evaluate phase closes the loop by telling you which phase to re-enter.
+Each phase produces artifacts that feed the next. Specs live in `docs/` as markdown files committed to your repo. Tests trace back to acceptance criteria via `AC-N` references. The evaluate phase closes the loop by telling you which phase to re-enter.
 
 ## Quick Start — Add to Your Project
 
@@ -108,7 +108,7 @@ Run `/tdd-0-init` first to set up the docs structure. Then pick the messiest or 
 
 ### For a new project
 
-Start with `/tdd-0-init`. The skill will interview you, create the `docs/specs/` directory with structured spec documents, and generate README files that make the documentation discoverable on GitHub. Then run `/tdd-1-requirements` to add cycle-specific acceptance criteria.
+Start with `/tdd-0-init`. The skill will interview you, create the `docs/` directory with structured spec documents, and generate README files that make the documentation discoverable on GitHub. Then run `/tdd-1-requirements` to add cycle-specific acceptance criteria.
 
 ## What's in Each Skill
 
@@ -125,7 +125,6 @@ tdd-0-init/
     ├── integration.md
     ├── infrastructure.md
     ├── docs-readme.md
-    ├── specs-readme.md
     ├── roadmap.md
     └── root-readme.md
 
