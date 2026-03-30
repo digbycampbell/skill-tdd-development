@@ -1,10 +1,10 @@
 ---
 name: tdd-3-implement
-description: "Phase 3 of a TDD development pipeline. Use this skill to write implementation code that makes failing tests pass. Invoke when the user says \"implement\", \"phase 3\", \"green phase\", \"make tests pass\", or wants to write the actual feature code. This skill reads docs/specs/ documents and existing tests, then writes the minimum code needed to make tests pass."
+description: "Phase 3 of a TDD development pipeline. Use this skill to write implementation code that makes failing tests pass. Invoke when the user says \"implement\", \"phase 3\", \"green phase\", \"make tests pass\", or wants to write the actual feature code. This skill reads docs/ documents and existing tests, then writes the minimum code needed to make tests pass."
 license: MIT
 metadata:
   author: user
-  pipeline-version: "1.3.0"
+  pipeline-version: "1.4.0"
   pipeline-phase: "3"
 ---
 
@@ -19,7 +19,7 @@ That's Phase 4. Right now, the only question is: do the tests pass?
 
 ## Before You Start
 
-1. **Read the specs.** Read all documents in `docs/specs/`. These are your source of truth for
+1. **Read the specs.** Read all documents in `docs/`. These are your source of truth for
    intended behaviour.
 
 2. **Read every test file.** Understand what's being tested and what the expected behaviour
@@ -51,7 +51,7 @@ figuring out why 15 tests still fail.
 
 Start with the foundations and work upward:
 
-1. **Data models / types** — define the shapes first (guided by `docs/specs/data-model.md`)
+1. **Data models / types** — define the shapes first (guided by `docs/data-model.md`)
 2. **Core logic / utilities** — pure functions, validation, transformation
 3. **Data access layer** — database queries, API clients
 4. **Business logic / services** — orchestration of core logic + data access
@@ -76,7 +76,7 @@ The temptation to generalise is strong. Resist it. Duplication and simplicity ar
 at this stage. Phase 4 is specifically for cleaning up.
 
 The one exception: if the specs explicitly call for a particular architecture or pattern
-(e.g., `docs/specs/architecture.md` specifies a service layer), follow that structure even
+(e.g., `docs/architecture.md` specifies a service layer), follow that structure even
 if a simpler approach would make the tests pass. The specs represent deliberate design
 decisions.
 
@@ -145,7 +145,7 @@ All tests pass. At this point:
 
 If during implementation you discover a bug or improvement that needs addressing:
 
-1. STOP and add it as a new AC in `docs/specs/requirements.md` with the next
+1. STOP and add it as a new AC in `docs/requirements.md` with the next
    available number, marked as `[HOTFIX]` or `[DISCOVERED]`.
 2. Write a test for it (even a minimal one).
 3. Then implement it.

@@ -1,18 +1,18 @@
 ---
 name: tdd-2-test-design
-description: "Phase 2 of a TDD development pipeline. Use this skill to design and write tests BEFORE implementation. Invoke when the user says \"test design\", \"write tests\", \"phase 2\", \"red phase\", or wants to create tests based on existing specification documents. This skill reads docs/specs/ documents and produces a failing test suite. No implementation code is written — only tests."
+description: "Phase 2 of a TDD development pipeline. Use this skill to design and write tests BEFORE implementation. Invoke when the user says \"test design\", \"write tests\", \"phase 2\", \"red phase\", or wants to create tests based on existing specification documents. This skill reads docs/ documents and produces a failing test suite. No implementation code is written — only tests."
 license: MIT
 compatibility: Requires Node.js for traceability script. Project should use Vitest, Jest, or Playwright.
 metadata:
   author: user
-  pipeline-version: "1.3.0"
+  pipeline-version: "1.4.0"
   pipeline-phase: "2"
 ---
 
 # TDD Phase 2 — Test Design (The "Red" Setup)
 
 You are acting as a test engineer. Your job is to translate the specification documents
-in `docs/specs/` into a concrete, runnable test suite that currently fails (because no
+in `docs/` into a concrete, runnable test suite that currently fails (because no
 implementation exists yet).
 
 Do not write implementation code. Do not make tests pass. Every test you write should
@@ -20,12 +20,12 @@ fail or error when run — that's the correct state at the end of this phase.
 
 ## Before You Start
 
-1. **Read all documents in `docs/specs/`.** Every spec document is relevant context.
+1. **Read all documents in `docs/`.** Every spec document is relevant context.
    Pay particular attention to:
-   - `docs/specs/requirements.md` — the acceptance criteria are your primary input
-   - `docs/specs/data-model.md` — tells you what shapes to assert against
-   - `docs/specs/api.md` — tells you request/response contracts to verify
-   - `docs/specs/ui.md` — tells you user flows to cover
+   - `docs/requirements.md` — the acceptance criteria are your primary input
+   - `docs/data-model.md` — tells you what shapes to assert against
+   - `docs/api.md` — tells you request/response contracts to verify
+   - `docs/ui.md` — tells you user flows to cover
 
 2. **Check for an existing test setup.** Look for a test runner config (jest.config,
    vitest.config, playwright.config, etc.) and existing test files. Work within the
@@ -55,12 +55,12 @@ Test how components work together. The boundaries between units.
 - API endpoint tests: correct request → correct response, bad request → proper error
 - Database interaction tests: create, read, update, delete cycles
 - Service-to-service communication
-- Authentication and authorisation flows (if `docs/specs/auth.md` exists)
+- Authentication and authorisation flows (if `docs/auth.md` exists)
 
 ### End-to-End Tests (`tests/e2e/`)
 Test complete user flows from the UI layer through to the data layer.
 
-- One test per user flow documented in `docs/specs/ui.md`
+- One test per user flow documented in `docs/ui.md`
 - Cover the happy path first, then critical error paths
 - Test loading, empty, and error states
 
@@ -137,7 +137,7 @@ These are commonly missed and frequently cause bugs:
 3. **Get user approval on the plan** before writing code. They may know about edge cases
    you've missed, or may want to deprioritise certain test categories.
 
-4. **Save the test plan.** Once approved, write the test plan to `docs/specs/test-plan.md`.
+4. **Save the test plan.** Once approved, write the test plan to `docs/test-plan.md`.
    This persists the plan as a handoff artifact so that Phase 3 (and anyone picking up
    the work in a different session) has full context on what was planned, what was
    prioritised, and what was deliberately deferred. Update this file as tests are written —
@@ -183,8 +183,8 @@ At the top of each test file, add a comment linking back to the spec:
 ```
 /**
  * Tests for: [Feature Name]
- * Spec: docs/specs/requirements.md — Acceptance Criteria #3, #4, #7
- * Spec: docs/specs/api.md — POST /api/items, GET /api/items/:id
+ * Spec: docs/requirements.md — Acceptance Criteria #3, #4, #7
+ * Spec: docs/api.md — POST /api/items, GET /api/items/:id
  */
 ```
 
@@ -200,7 +200,7 @@ tests, run it to verify that every acceptance criterion has at least one test re
 node scripts/traceability.mjs [project-root]
 ```
 
-The script scans `docs/specs/` for `AC-N` patterns and test files for spec reference comments,
+The script scans `docs/` for `AC-N` patterns and test files for spec reference comments,
 then reports which criteria are covered and which are missing tests. It also catches
 "orphan" references — tests that reference AC numbers that don't exist in the specs,
 which usually means a spec was updated without updating the tests.
@@ -211,7 +211,7 @@ Each TDD cycle (Phases 1–5) should happen on a single feature branch. You shou
 the same branch that was created during Phase 1 (e.g., `feature/user-auth`).
 
 Commit at the end of this phase once the failing test suite is complete and the test plan
-has been saved to `docs/specs/test-plan.md`. This is a natural commit point — mention it
+has been saved to `docs/test-plan.md`. This is a natural commit point — mention it
 to the user. Don't commit without asking.
 
 ## Phase Interrupts
@@ -225,5 +225,5 @@ contradictory, follow this protocol:
    want to proceed with an assumption (which you should document in the test plan).
 3. **Get user confirmation** before proceeding with any assumption about intended behaviour.
    Never guess at what a spec should say — the user must decide.
-4. **Document any assumptions** in the test plan (`docs/specs/test-plan.md`) so they're
+4. **Document any assumptions** in the test plan (`docs/test-plan.md`) so they're
    visible when the spec is eventually updated.

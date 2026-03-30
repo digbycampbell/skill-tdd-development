@@ -4,10 +4,18 @@ All skills in this pipeline are versioned together. Each release applies to
 all six phases. Use git tags (e.g., `v1.1.0`) to pin a specific version in
 your project's submodule.
 
+## v1.4.0 — 2026-03-30
+
+### Changed
+- **All phases:** Flattened `docs/specs/` into `docs/`. Spec files (requirements.md, architecture.md, etc.) now live directly in `docs/` alongside ROADMAP.md and README.md. The extra `specs/` nesting was unnecessary.
+- Removed `specs-readme.md` template. Its content (spec document index, status table, evaluation history) is now part of `docs-readme.md`.
+- Traceability script updated to scan `docs/` instead of `docs/specs/`.
+- All SKILL.md frontmatter: pipeline-version bumped to 1.4.0.
+
 ## v1.3.0 — 2026-03-29
 
 ### Added
-- **Phase 0 (tdd-0-init):** New project initialisation skill. Runs once per project to create the `docs/specs/` directory, canonical spec documents, READMEs, and roadmap. Templates and assets moved here from Phase 1.
+- **Phase 0 (tdd-0-init):** New project initialisation skill. Runs once per project to create the `docs/` directory, canonical spec documents, READMEs, and roadmap. Templates and assets moved here from Phase 1.
 - Phase 1: "Single Source of Truth" rule — one `requirements.md` per project, global monotonically increasing AC numbers, no file-per-feature or file-per-cycle.
 - Phase 1: "No Unspec'd Work" rule — bugs and improvements discovered during implementation must get an AC (tagged `[HOTFIX]` or `[DISCOVERED]`) and a test before being implemented.
 - Phase 1: "Supersession Protocol" — strike through old ACs when requirements change, reference replacements, keep all spec files consistent.
@@ -42,7 +50,7 @@ your project's submodule.
 ### Added
 - Phase 1: Scope check heuristic (AC count guidance and vertical slice rule)
 - Phase 1: Roadmap template (`assets/roadmap.md`) and root README template (`assets/root-readme.md`)
-- Phase 2: Persistent test plan artifact (`docs/specs/test-plan.md`)
+- Phase 2: Persistent test plan artifact (`docs/test-plan.md`)
 - All phases: Branch and commit strategy guidance (one feature branch per TDD cycle)
 - All phases: Phase interrupt protocol with mandatory user confirmation before modifying upstream artifacts
 - Traceability script: Now tracks API endpoints, data model entities, state transitions, and UI flows (not just acceptance criteria)

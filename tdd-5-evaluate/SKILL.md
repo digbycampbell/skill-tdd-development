@@ -4,7 +4,7 @@ description: "Phase 5 of a TDD development pipeline. Use this skill to evaluate 
 license: MIT
 metadata:
   author: user
-  pipeline-version: "1.3.0"
+  pipeline-version: "1.4.0"
   pipeline-phase: "5"
 ---
 
@@ -25,14 +25,14 @@ This is the decision point in the TDD cycle. After evaluation, the user either s
    node .claude/skills/tdd-2-test-design/scripts/traceability.mjs .
    ```
    (Adjust the path if the skills submodule is installed elsewhere.)
-   This produces a coverage report at `docs/specs/traceability-report.json` and prints a
+   This produces a coverage report at `docs/traceability-report.json` and prints a
    summary to stdout. It tracks acceptance criteria, API endpoints, data model entities,
    state transitions, and UI flows. Use this as the starting point for your evaluation —
    it catches the mechanical gaps so you can focus on the qualitative ones.
 
 2. Read everything:
 
-   a. **All spec documents in `docs/specs/`** — this is what was promised
+   a. **All spec documents in `docs/`** — this is what was promised
    b. **All test files** — this is what's verified
    c. **All implementation code** — this is what exists
    d. **Test results** — run the full suite and capture the output
@@ -45,21 +45,21 @@ Work through each dimension and produce a clear assessment.
 
 Go through each spec document and check every testable claim against the test suite.
 
-For `docs/specs/requirements.md`:
+For `docs/requirements.md`:
 - Each acceptance criterion → does a test exist that directly verifies it?
 - Each user story → is the user flow covered end-to-end?
 
-For `docs/specs/api.md`:
+For `docs/api.md`:
 - Each endpoint → are success, error, and auth cases all tested?
 
-For `docs/specs/data-model.md`:
+For `docs/data-model.md`:
 - Each entity → are creation, validation, and edge cases tested?
 - Each state transition → are valid and invalid transitions tested?
 
-For `docs/specs/auth.md`:
+For `docs/auth.md`:
 - Each permission rule → is there a test that verifies both grant and deny?
 
-For `docs/specs/ui.md`:
+For `docs/ui.md`:
 - Each user flow → is there an e2e test?
 - Each UI state (loading, empty, error) → is it tested?
 
@@ -187,13 +187,13 @@ Then update the project documentation:
 - Add any newly discovered work items to Future / Backlog
 - Update sequencing notes if priorities have changed based on findings
 
-**`docs/specs/README.md`** — update the status column for each spec document:
+**`docs/README.md`** — update the status column for each spec document:
 - Specs that are fully covered by passing tests → ✅ Current
 - Specs with drift or incomplete coverage → 🚧 Needs update
 - Add a row for the new evaluation report
 
-**`docs/README.md`** and **root `README.md`** — generally don't need updating
-per cycle, but flag if anything in them has become inaccurate.
+**Root `README.md`** — generally doesn't need updating per cycle, but flag
+if anything in it has become inaccurate.
 
 ## Output Format
 
@@ -222,7 +222,7 @@ Date: [today]
 [specific recommendation with reasoning]
 ```
 
-Save this report to `docs/specs/evaluation-[date or iteration number].md` so there's a
+Save this report to `docs/evaluation-[date or iteration number].md` so there's a
 history of evaluations over time.
 
 ## Templates
@@ -231,7 +231,7 @@ This skill bundles a report template at `assets/evaluation-report.md`. Copy it
 into the project and fill it in rather than constructing the report from scratch:
 
 ```bash
-cp assets/evaluation-report.md docs/specs/evaluation-[N].md
+cp assets/evaluation-report.md docs/evaluation-[N].md
 ```
 
 The template includes structured tables for traceability, test quality, spec drift,

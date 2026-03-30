@@ -6,9 +6,8 @@
 
 | | |
 |---|---|
-| **[Specifications](docs/specs/)** | Requirements, architecture, data model, API contracts |
+| **[Documentation](docs/)** | Requirements, architecture, data model, API contracts |
 | **[Roadmap](docs/ROADMAP.md)** | Priorities, current cycle, sequencing |
-| **[All docs](docs/)** | Documentation index |
 
 ## Getting Started
 
@@ -29,7 +28,7 @@ npm run dev
 ## Development
 
 This project uses a TDD development pipeline. See the [roadmap](docs/ROADMAP.md)
-for current priorities and [docs/specs/](docs/specs/) for detailed specifications.
+for current priorities and [docs/](docs/) for detailed specifications.
 
 The pipeline skills are included as a git submodule at `.claude/skills/`.
 To update them: `git submodule update --remote .claude/skills`

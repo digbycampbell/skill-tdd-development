@@ -11,7 +11,7 @@
 
 <!-- How callers identify themselves. JWT, session cookie, API key, etc. -->
 
-[Describe auth mechanism. Reference specs/auth.md if it exists for detailed auth rules.]
+[Describe auth mechanism. Reference auth.md if it exists for detailed auth rules.]
 
 ## Endpoints
 

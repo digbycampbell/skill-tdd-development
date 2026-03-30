@@ -12,7 +12,7 @@
 
 | Priority | Item | Description | Status | Spec |
 |----------|------|-------------|--------|------|
-| 1 | [R1/feature name] | [One-line description] | 🔴 Not started | [specs/requirements.md](specs/requirements.md) |
+| 1 | [R1/feature name] | [One-line description] | 🔴 Not started | [requirements.md](requirements.md) |
 | 2 | [R2/feature name] | [One-line description] | 🔴 Not started | |
 | 3 | [R3/feature name] | [One-line description] | 🔴 Not started | |
 
